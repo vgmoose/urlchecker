@@ -87,11 +87,19 @@
         
         TotalCount = 0;
         
+        document.getElementById('go').disabled = true;
+        document.getElementById('go').style.opacity = .5;
+        document.getElementById('go').style.cursor = "default";
+
+        
         var domain = document.getElementById('domain').value;
         
         var checking = "<br><font color=\"blue\">checking...";
         var exist = "<br><font color=\"red\">all exist</font>";
+        
         document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(exist, '');
+        document.getElementById('available').innerHTML+= checking;
+
         
         for (var x=0; x<subs.length; x++)
         {
@@ -102,7 +110,14 @@
             {
                 TotalCount++;
                 if (final == TotalCount)
+                {
                 document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(checking, '');
+                    document.getElementById('go').disabled = false;
+                    document.getElementById('go').style.opacity = 1;
+                    document.getElementById('go').style.cursor = "pointer";
+
+
+                }
 
                 continue;
             }
@@ -114,8 +129,16 @@
                 
                 if (final != TotalCount)
                 document.getElementById('available').innerHTML+= checking;
-                else if (document.getElementById('available').innerHTML == '')
+                else
+                                                                {
+                                                                if (document.getElementById('available').innerHTML == '')
                                                                 document.getElementById('available').innerHTML = exist;
+                                                                
+                                                                document.getElementById('go').disabled = false;
+                                                                document.getElementById('go').style.opacity = 1;
+                                                                document.getElementById('go').style.cursor = "pointer";
+
+                                                                }
             
         })
         .fail(function(result, url, fin) {
@@ -135,8 +158,15 @@
               
               if (final != TotalCount)
               document.getElementById('available').innerHTML+= checking;
-              else if (document.getElementById('available').innerHTML == '')
-              document.getElementById('available').innerHTML = exist;
+              else{
+              if (document.getElementById('available').innerHTML == '')
+                document.getElementById('available').innerHTML = exist;
+              document.getElementById('go').disabled = false;
+              document.getElementById('go').style.opacity = 1;
+              document.getElementById('go').style.cursor = "pointer";
+
+              }
+
               });
         
     }
