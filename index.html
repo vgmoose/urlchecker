@@ -93,9 +93,6 @@
         var exist = "<br><font color=\"red\">all exist</font>";
         document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(exist, '');
         
-        document.getElementById('available').innerHTML+= checking;
-        
-        
         for (var x=0; x<subs.length; x++)
         {
             var thissub = subs[x].toLowerCase().replace(/ /g, '');
@@ -104,6 +101,9 @@
             if (thissub == '')
             {
                 TotalCount++;
+                if (final == TotalCount)
+                document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(checking, '');
+
                 continue;
             }
             
@@ -143,7 +143,7 @@
     }
     </script>
 <center><h2>Tumblr URL Checker</h2>
-    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
+    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys&#13;&#10;&#13;&#10;seprate them by&#13;&#10;a new line</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
     
     <br><div id="available"></div>
 </center>
