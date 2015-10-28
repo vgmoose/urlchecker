@@ -83,7 +83,9 @@
     
     function checkURL()
     {
-        subs = document.getElementById('subs').value.split('\n');
+        subs = document.getElementById('subs').value;
+        subs = subs.replace(/\,/g, '\n');
+        subs = subs.split('\n');
         
         TotalCount = 0;
         
@@ -173,7 +175,7 @@
     }
     </script>
 <center><h2>Tumblr URL Checker</h2>
-    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys&#13;&#10;&#13;&#10;seprate them by&#13;&#10;a new line</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
+    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys&#13;&#10;official-meowmix&#13;&#10;&#13;&#10;bananapie, milkandeggs, a429, b774</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
     
     <br><div id="available"></div>
 </center>
