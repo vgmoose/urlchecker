@@ -1,181 +1,25 @@
 <title>Mass URL Checker</title>
 
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
-<style>
-    input, textarea {
-        border: 1px solid white;
-        -webkit-box-shadow:
-        inset 0 0 8px  rgba(0,0,0,0.1),
-        0 0 16px rgba(0,0,0,0.1);
-        -moz-box-shadow:
-        inset 0 0 8px  rgba(0,0,0,0.1),
-        0 0 16px rgba(0,0,0,0.1);
-        box-shadow:
-        inset 0 0 8px  rgba(0,0,0,0.1),
-        0 0 16px rgba(0,0,0,0.1);
-        padding: 15px;
-        background: rgba(255,255,255,0.5);
-        margin: 0 0 10px 0;
-    }
-    a
-    {
-        text-decoration: none;
-        color: black;
-    }
-    button
-    {
-        background:#25A6E1;
-        background:-moz-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
-        background:-webkit-gradient(linear,left top,left bottom,color-stop(0%,#25A6E1),color-stop(100%,#188BC0));
-        background:-webkit-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
-        background:-o-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
-        background:-ms-linear-gradient(top,#25A6E1 0%,#188BC0 100%);
-        background:linear-gradient(top,#25A6E1 0%,#188BC0 100%);
-        filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#25A6E1',endColorstr='#188BC0',GradientType=0);
-        padding:8px 13px;
-        color:#fff;
-        font-family:'Helvetica Neue',sans-serif;
-        font-size:17px;
-        border-radius:4px;
-        -moz-border-radius:4px;
-        -webkit-border-radius:4px;
-        border:1px solid #1A87B9;
-        cursor: pointer;
-    }
-    body
-    {
-        font-family: Arial, sans-serif;
-    }
-    </style>
-<script>
-    function isURLReal(fullyQualifiedURL, isFinal) {
-        var URL = encodeURIComponent(fullyQualifiedURL),
-        dfd = $.Deferred(),
-        checkURLPromise = $.getJSON('http://query.yahooapis.com/v1/public/yql?q=select%20*%20from%20html%20where%20url%3D%22' + URL + '%22&format=json&diagnostics=true');
-                
-        checkURLPromise
-        .done(function(response) {
-              var repcode;
-              try
-              {
-              repcode = response.query.diagnostics.url[0]["http-status-message"];
-              }
-              catch(err)
-              {
-              repcode = "Probably Enough";
-              }
-              // results should be null if the page 404s or the domain doesn't work
-              if (response.query.results || repcode != "Not Found") {
-              dfd.resolve(true, isFinal);
-              } else {
-              dfd.reject(false, URL, isFinal);
-              }
-              })
-        .fail(function() {
-              dfd.reject('failed');
-              });
-        
-        return dfd.promise();
-    }
-    
-    var subs;
-    var TotalCount = 0;
-    
-    function checkURL()
-    {
-        subs = document.getElementById('subs').value;
-        subs = subs.replace(/\,/g, '\n');
-        subs = subs.split('\n');
-        
-        TotalCount = 0;
-        
-        document.getElementById('go').disabled = true;
-        document.getElementById('go').style.opacity = .5;
-        document.getElementById('go').style.cursor = "default";
-
-        
-        var domain = document.getElementById('domain').value;
-        
-        var checking = "<br><font color=\"blue\">checking...";
-        var exist = "<br><font color=\"red\">all exist</font>";
-        
-        document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(exist, '');
-        document.getElementById('available').innerHTML+= checking;
-
-        
-        for (var x=0; x<subs.length; x++)
-        {
-            var thissub = subs[x].toLowerCase().replace(/ /g, '');
-            final = subs.length;
-            
-            if (thissub == '')
-            {
-                TotalCount++;
-                if (final == TotalCount)
-                {
-                document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(checking, '');
-                    document.getElementById('go').disabled = false;
-                    document.getElementById('go').style.opacity = 1;
-                    document.getElementById('go').style.cursor = "pointer";
-
-
-                }
-
-                continue;
-            }
-            
-            isURLReal('http://'+thissub+'.'+domain, final).done(function(result, fin) {
-                document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(checking, '');
-                
-                TotalCount++;
-                
-                if (final != TotalCount)
-                document.getElementById('available').innerHTML+= checking;
-                else
-                                                                {
-                                                                if (document.getElementById('available').innerHTML == '')
-                                                                document.getElementById('available').innerHTML = exist;
-                                                                
-                                                                document.getElementById('go').disabled = false;
-                                                                document.getElementById('go').style.opacity = 1;
-                                                                document.getElementById('go').style.cursor = "pointer";
-
-                                                                }
-            
-        })
-        .fail(function(result, url, fin) {
-              
-              if (typeof url !== 'undefined')
-              {
-              var nottaken = '<br><a target=\"_blank\" href=\"'+decodeURIComponent(url)+'\">'+decodeURIComponent(url).replace("http://", "")+'</a>'+" <font color=\"green\">does not exist</font>";
-              
-              if (document.getElementById('available').innerHTML.indexOf(nottaken) < 0)
-                    document.getElementById('available').innerHTML += nottaken;
-              }
-
-              
-              document.getElementById('available').innerHTML = document.getElementById('available').innerHTML.replace(checking, '');
-              
-              TotalCount++;
-              
-              if (final != TotalCount)
-              document.getElementById('available').innerHTML+= checking;
-              else{
-              if (document.getElementById('available').innerHTML == '')
-                document.getElementById('available').innerHTML = exist;
-              document.getElementById('go').disabled = false;
-              document.getElementById('go').style.opacity = 1;
-              document.getElementById('go').style.cursor = "pointer";
-
-              }
-
-              });
-        
-    }
-    }
-    </script>
+<link rel="stylesheet" href="index.css"></link>
+<script src="index.js"></script>
 <center><h2>Tumblr URL Checker</h2>
-    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys&#13;&#10;official-meowmix&#13;&#10;&#13;&#10;bananapie, milkandeggs, a429, b774</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
+    <textarea id="subs" cols=20 rows=12>bulbasaur&#13;&#10;mewtwo&#13;&#10;deoxys&#13;&#10;official-meowmix&#13;&#10;&#13;&#10;bananapie, milkandeggs, a478, b7752&#13;&#10;&#13;&#10;enter words separated&#13;&#10;by newlines, or commas</textarea><input hidden id="domain" value="tumblr.com"></input><br><button onclick="checkURL()" id="go">check</button>
     
     <br><div id="available"></div>
+<br><br>
+<span id="menu"><input type="checkbox" checked id="usedelim"></input>replace spaces with dashes</span>
+<br><br><br>
+<br><br><br>
+<div id="ad">
+	<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+	<!-- Tumblr URL Checker -->
+	<ins class="adsbygoogle"
+		 style="display:inline-block;width:728px;height:90px"
+		 data-ad-client="ca-pub-8148658375496745"
+		 data-ad-slot="2472840903"></ins>
+	<script>
+	(adsbygoogle = window.adsbygoogle || []).push({});
+	</script>
+</div>
 </center>
